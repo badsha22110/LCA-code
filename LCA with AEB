@@ -1,0 +1,80 @@
+import matplotlib.pyplot as plt
+
+def plot_indicator(indicator_name, categories, values):
+    # Normalize to percentage
+    max_value = max(values)
+    percentages = [(value / max_value) * 100 for value in values]
+
+    # Plot
+    plt.figure(figsize=(8, 12))
+    plt.bar(categories, percentages, color=['blue', 'yellow', 'red', 'green'])
+
+    # Add labels and title with increased font sizes
+    plt.xlabel('Categories', fontsize=12)
+    plt.ylabel('Percentage of Maximum (%)', fontsize=17)
+    plt.title(indicator_name, fontsize=17)
+    plt.ylim(-40, 110)  # To show percentages clearly
+
+    # Set font size for category (x-axis) labels
+    plt.xticks(fontsize=14)
+
+    # Show percentage values on bars with increased font size
+    for i, value in enumerate(percentages):
+        plt.text(i, value + 1, f'{value:.2f}%', ha='center', fontsize=15)
+
+    # Display the chart
+    plt.show()
+
+# Data for each indicator
+indicators = [
+    {
+        "name": "Acidification",
+        "values": [6.49218e+0, 1.04719e+1, 4.66283e-2, -1.36e+00]
+    },
+    {
+        "name": "Climate change",
+        "values": [4.47401e+2, 3.75311e+3, 1.30274e+1, -3.01e+02]
+    },
+    {
+        "name": "Ecotoxicity: freshwater",
+        "values": [3.19778e+3, 1.00487e+3, 8.16612e+0, -1.06e+02]
+    },
+    {
+        "name": "Ecotoxicity: marine",
+        "values": [4.90585e+6, 2.95710e+6, 1.99284e+4, -5.39e+04]
+    },
+    {
+        "name": "Ecotoxicity: terrestrial",
+        "values": [5.48565e+1, 2.61454e+1, 2.84525e-1, -1.07e+01]
+    },
+    {
+        "name": "Energy resources: non-renewable",
+        "values": [6.05117e+3, 5.31738e+4, 1.75852e+2, -2.98e+03]
+    },
+    {
+        "name": "Eutrophication",
+        "values": [3.08710e+0, 3.58485e+0, 1.94507e-2, -1.17e+00]
+    },
+    {
+        "name": "Human toxicity",
+        "values": [9.23412e+3, 3.97510e+3, 4.78406e+1, -1.65e+03]
+    },
+    {
+        "name": "Material resources: metals/minerals",
+        "values": [1.05915e-1, 3.52344e-3, 8.23476e-5, -1.003e-02]
+    },
+    {
+        "name": "Ozone depletion",
+        "values": [1.23339e-5, 5.33582e-5, 1.59489e-7, -1.30e-05]
+    },
+    {
+        "name": "Photochemical oxidant formation",
+        "values": [3.31115e-1, 7.00694e-1, 5.47599e-3, -1.35e-01]
+    },
+]
+
+categories = ['Production', 'Use Phase', 'Transportation', 'AEB']
+
+# Generate plots for each indicator
+for indicator in indicators:
+    plot_indicator(indicator["name"], categories, indicator["values"])
