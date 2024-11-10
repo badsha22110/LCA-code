@@ -1,0 +1,104 @@
+#production stage LCA
+import matplotlib.pyplot as plt
+
+# Define consistent colors for each component
+color_map = {
+    "Polystyrene": '#FF5733',
+    "Waste Polystyrene": '#33FF57',
+    "Brazing Solder": '#3357FF',
+    "IC and Cable production": '#FF33A8',
+    "Others": '#A833FF',
+    "Iron Nickel Alloy": '#FFC300',
+    "Polystyrene(Raw)": '#FF8C33',
+    "Label and Sticker": '#8CFF33',
+    "Production of sheet metal": '#338CFF',
+    "Transformer Production": '#FF338C',
+    "Injection items and foaming chemical": '#33FFA8',
+    "Waste Polyurethane": '#FF5733',
+    "Waste Steel": '#33A8FF',
+    "Isocyanate": '#FFCC00',
+    "Gasket & Magnet": '#00BFFF'
+}
+
+
+# All datasets
+datasets = {
+    "Acidification": (
+        ["Iron Nickel Alloy", "Brazing Solder", "Transformer Production", "IC and Cable production", "Others"],
+        [12.40, 9.70, 4.20, 10.57, 63.13]
+    ),
+    "Photochemical Oxidant Formation": (
+        ["Iron Nickel Alloy", "IC and Cable production", "Brazing Solder", "Waste Steel", "Waste Polyurethane", "Others"],
+        [12.56, 10.57, 8.75, 4.60, 3.39, 60.13]
+    ),
+    "Climate Change": (
+        ["IC and Cable production", "Waste Steel", "Brazing Solder", "Iron Nickel Alloy", "Polystyrene", "Isocyanate", "Others"],
+        [19.36, 16.52, 4.41, 4.18, 6.81, 6.26, 42.46]
+    ),
+    "Ecotoxicity Fresh Water": (
+        ["Waste Steel", "Brazing Solder", "IC and Cable production", "Production of sheet metal", "Others"],
+        [75.36, 6.19, 8.52, 2.09, 7.84]
+    ),
+    "Ecotoxicity Marine": (
+        ["Waste Steel", "Brazing Solder", "IC and Cable production", "Production of sheet metal", "Others"],
+        [40.03, 12.13, 20.72, 8.49, 18.63]
+    ),
+    "Ecotoxicity Terrestrial": (
+        ["Production of sheet metal", "Brazing Solder", "Iron Nickel Alloy", "IC and Cable production", "Waste Polystyrene", "Waste Polyurethane", "Waste Steel", "Others"],
+        [17.37, 9.23, 31.77, 10, 9.70, 5.58, 5.22, 11.13]
+    ),
+    "Non Re. Energy Resources": (
+        ["IC and Cable production", "Polystyrene(Raw)", "Isocyanate", "Waste Steel", "Production of sheet metal","Brazing Solder","Iron Nickel Alloy","Gasket & Magnet","Label and Sticker", "Others"],
+        [18.99, 12.65, 8.80, 13.11, 5.11, 4.06, 4.07, 8.93, 5.16, 19.12]
+    ),
+    "Eutrophication": (
+        ["Waste Polystyrene", "IC and Cable production", "Brazing Solder", "Waste Steel", "Waste Polyurethane", "Others"],
+        [14.88, 18.83, 8.55, 7.56, 24.13, 26.05]
+    ),
+    "Human Toxicity": (
+        ["Brazing Solder", "Production of sheet metal", "IC and Cable production", "Iron Nickel Alloy", "Waste Polystyrene", "Waste Steel", "Waste Polyurethane", "Others"],
+        [16.95, 15.10, 18.09, 6.08, 14.81, 6.96, 6.83, 15.18]
+    ),
+    "Ozone Depletion": (
+        ["IC and Cable production", "Label and Sticker", "Waste Steel", "Isocyanate", "Gasket & Magnet", "Others"],
+        [47.57, 14.83, 7.18, 6.90, 16.59, 6.93]
+    )
+}
+
+# Plotting
+fig, ax = plt.subplots(figsize=(12, 10))
+
+# Create one bar for each dataset
+for i, (category, (components, percentages)) in enumerate(datasets.items()):
+    bottoms = [0]
+    for j in range(1, len(percentages)):
+        bottoms.append(bottoms[j-1] + percentages[j-1])
+
+    ax.bar(
+        [i] * len(percentages),
+        percentages,
+        color=[color_map[comp] for comp in components],
+        width=0.5,
+        bottom=bottoms
+    )
+
+# Adding labels and title
+ax.set_title('LCIA Impact Categories in Production Stage (Hotspot(s))', fontsize=14)
+ax.set_ylabel('Percentage (%)', fontsize=12)
+ax.set_xticks(range(len(datasets)))
+ax.set_xticklabels(datasets.keys(), rotation=45, ha="right")
+ax.set_ylim(0, 100)
+
+# Adding horizontal grid lines and labels at 10%, 20%, ..., 100%
+ax.set_yticks(range(0, 101, 10))
+ax.set_yticklabels([f"{i}%" for i in range(0, 101, 10)])
+ax.grid(axis='y', color='gray', linestyle='--', linewidth=0.5)
+
+# Adding legend below the chart
+unique_components = list(color_map.keys())
+handles = [plt.Line2D([0], [0], color=color_map[comp], lw=4) for comp in unique_components]
+ax.legend(handles, unique_components, loc='upper center', bbox_to_anchor=(0.5, -0.25), ncol=3)
+
+# Adjust layout to fit legend
+plt.tight_layout()
+plt.show()
